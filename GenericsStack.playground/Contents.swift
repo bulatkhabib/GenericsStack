@@ -1,21 +1,53 @@
 //: A UIKit based Playground for presenting user interface
-  
-import UIKit
-import PlaygroundSupport
 
-class MyViewController : UIViewController {
-    override func loadView() {
-        let view = UIView()
-        view.backgroundColor = .white
+import Foundation
 
-        let label = UILabel()
-        label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
-        label.text = "Hello World!"
-        label.textColor = .black
-        
-        view.addSubview(label)
-        self.view = view
+struct Stack<T>: Stackable {
+
+    private var storage = [T]()
+    
+    var isEmpty: Bool {
+        storage.isEmpty
     }
+    
+    var count: Int {
+        storage.count
+    }
+    
+    var peek: T? {
+        storage.last
+    }
+    
+    mutating func push(_ element: T) {
+        storage.append(element)
+    }
+    
+    mutating func pop() -> T? {
+        isEmpty ? nil : storage.popLast()
+    }
+    
+    typealias Element = T
+    
+    
 }
-// Present the view controller in the Live View window
-PlaygroundPage.current.liveView = MyViewController()
+
+protocol Stackable {
+    associatedtype Element
+    var isEmpty: Bool { get }
+    var count: Int { get }
+    var peek: Element? { get }
+    mutating func push(_ element: Element)
+    @discardableResult mutating func pop() -> Element?
+}
+
+var stack = Stack<Int>()
+stack.push(1)
+stack.push(2)
+stack.push(3)
+print(stack.isEmpty)
+print(stack.peek)
+print(stack.pop())
+print(stack)
+print(stack.pop())
+print(stack.pop())
+print(stack.isEmpty)
